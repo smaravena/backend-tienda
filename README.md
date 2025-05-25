@@ -1,49 +1,89 @@
-# backend-tienda
-Como probar endpoints en postman:
-Despues de selccionar post e ingresar http://3.91.242.183, debemos seleccionar raw e ingresar el siguiente body:
-Ruta /login
-{
-  "username":"user",
-  "password":"password"
-}
-Posibles errores: 400 Bad Request: Credenciales inválidas o usuario no confirmado u 401 Unauthorized: Acceso denegado
-Si todo esta correcto,la respuesta sera:
-{
-  "token": "token",
-  "accessToken": "accestoken",
-  "refreshToken": "refreshtoken"
-}
-Ruta /register(POST):
-{
-  "username": "usuario123",
-  "password": "Contrasena123.",
-  "email": "usuario@gmail.com",
-  "name": "Nombre",
-  "familyName": "Apellido"
-}
-Posibles Errores: 400 Bad Request: Faltan campos obligatorios, el usuario ya existe, o hay errores de validación.
-Si todo esta correcto,la respuesta sera: 
-{
-  "message": "Usuario registrado con éxito",
-  "data": {
-    "UserConfirmed": false,
-    "CodeDeliveryDetails": {
-      "AttributeName": "email",
-      "DeliveryMedium": "EMAIL",
-      "Destination": "u***@e***.com"
-    },
-    "UserSub": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-  }
-}
-Ruta /Confirm (POST):
-Ingresar siguiente body:
-{
-  "username":"usuario"
-  "code":"CodigoDeVerificacion"
-}
-Posibles errores:  400 Bad Request: Código incorrecto, expirado o usuario inexistente.
-Si todo esta correcto, la respuesta sera:
-{
-  "message": "Usuario confirmado exitosamente",
-  "data": {}
-}
+ # backend-tienda
+
+ Este README explica cómo probar los endpoints del backend usando Postman.
+
+ ---
+
+ ## Cómo probar endpoints
+
+ Para cada endpoint, usar el método **POST** y la URL base `http://3.91.242.183`. Asegúrate de seleccionar **`raw`** en el cuerpo de la solicitud (body) e ingresar el JSON.
+
+ ### Ruta `/login`
+
+ **Cuerpo de la solicitud (Body):**
+ ```json
+ {
+   "username":"user",
+   "password":"password"
+ }
+ ```
+
+ **Posibles errores:**
+ * `400 Bad Request`: Credenciales inválidas o usuario no confirmado.
+ * `401 Unauthorized`: Acceso denegado.
+
+ **Respuesta exitosa:**
+ ```json
+ {
+   "token": "token",
+   "accessToken": "accestoken",
+   "refreshToken": "refreshtoken"
+ }
+ ```
+
+ ---
+
+ ### Ruta `/register`
+
+ **Cuerpo de la solicitud (Body):**
+ ```json
+ {
+   "username": "usuario123",
+   "password": "Contrasena123.",
+   "email": "usuario@gmail.com",
+   "name": "Nombre",
+   "familyName": "Apellido"
+ }
+ ```
+
+ **Posibles errores:**
+ * `400 Bad Request`: Faltan campos obligatorios, el usuario ya existe, o hay errores de validación.
+
+ **Respuesta exitosa:**
+ ```json
+ {
+   "message": "Usuario registrado con éxito",
+   "data": {
+     "UserConfirmed": false,
+     "CodeDeliveryDetails": {
+       "AttributeName": "email",
+       "DeliveryMedium": "EMAIL",
+       "Destination": "u***@e***.com"
+     },
+     "UserSub": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+   }
+ }
+ ```
+
+ ---
+
+ ### Ruta `/Confirm`
+
+ **Cuerpo de la solicitud (Body):**
+ ```json
+ {
+   "username":"usuario",
+   "code":"CodigoDeVerificacion"
+ }
+ ```
+
+ **Posibles errores:**
+ * `400 Bad Request`: Código incorrecto, expirado o usuario inexistente.
+
+ **Respuesta exitosa:**
+ ```json
+ {
+   "message": "Usuario confirmado exitosamente",
+   "data": {}
+ }
+ ```
