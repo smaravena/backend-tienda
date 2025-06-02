@@ -1,6 +1,6 @@
  # backend-tienda
 
- Este README explica cómo probar los endpoints del backend usando Postman.
+ Este README explica cómo probar los endpoints del backend.
 
  ---
 
