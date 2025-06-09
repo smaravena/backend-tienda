@@ -6,7 +6,7 @@
 
  ## Cómo probar endpoints
 
- Para cada endpoint, usar el método **POST** y la URL base `http://35.168.133.16`. Asegúrate de seleccionar **`raw`** en el cuerpo de la solicitud (body) e ingresar el JSON.
+ Para cada endpoint, usar el método **POST** y la URL base `http://35.168.133.16:3000`. Asegúrate de seleccionar **`raw`** en el cuerpo de la solicitud (body) e ingresar el JSON.
 
  ### Ruta `/login`
 
