@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // REGION
-AWS.config.update({ region: "us-east-1",accessKeyId,secretAccessKey,sessionToken });
+AWS.config.update({ region: "us-east-1"});
 
 // SECRETS
 const CLIENT_ID = "";
@@ -18,7 +18,7 @@ const USER_POOL_ID = "";
 const accessKeyId ="";
 const secretAccessKey = "";
 const sessionToken="";
-
+AWS.config.update({accessKeyId,secretAccessKey,sessionToken});
 // GEN HASH
 function generateSecretHash(username) {
   return crypto
