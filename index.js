@@ -9,16 +9,19 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // REGION
-AWS.config.update({ region: "us-east-1"});
+AWS.config.update({ region: "us-east-1" });
 
 // SECRETS
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
 const USER_POOL_ID = "";
+
+// AWS CONSOLE SECRETS
 const accessKeyId ="";
 const secretAccessKey = "";
 const sessionToken="";
 AWS.config.update({accessKeyId,secretAccessKey,sessionToken});
+
 // GEN HASH
 function generateSecretHash(username) {
   return crypto
@@ -72,6 +75,8 @@ app.post("/login", async (req, res) => {
       .json({ error: err.message || JSON.stringify(err) });
   }
 });
+
+// REGISTER ROUTE
 app.post("/register", async (req, res) => {
   const { username, password, email, name, familyName } = req.body;
 
@@ -101,6 +106,8 @@ app.post("/register", async (req, res) => {
     res.status(400).json({ error: err.message || JSON.stringify(err) });
   }
 });
+
+// CONFIRM ROUTE
 app.post("/confirm", async (req, res) => {
   const { username, code } = req.body;
 
@@ -125,6 +132,8 @@ app.post("/confirm", async (req, res) => {
     res.status(400).json({ error: err.message || JSON.stringify(err) });
   }
 });
+
+// LIST USERS ROUTE
 app.get("/users", async (req, res) => {
   const cognito = new AWS.CognitoIdentityServiceProvider(); 
   const users = [];
@@ -169,7 +178,7 @@ app.get("/users", async (req, res) => {
 
     } while (paginationToken);
 
-    // Ordenar por grupo (alfabéticamente)
+    // SORT BY GROUP ASC
     users.sort((a, b) => a.Group.localeCompare(b.Group));
 
     res.json(users);
@@ -182,6 +191,8 @@ app.get("/users", async (req, res) => {
     });
   }
 });
+
+//VER ESTO
 /*
 app.get("/protegido", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -200,5 +211,5 @@ app.get("/protegido", (req, res) => {
 // START SERVER
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0',() => {
-  console.log(`Servidor corriendo en http://3.91.242.183:${PORT}`);
+  console.log(`Servidor corriendo en http://35.168.133.16:${PORT}`);
 });
