@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const crypto = require("crypto");
 const AWS = require("aws-sdk");
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
+const jwkToPem = require("jwk-to-pem");
 
 const app = express();
 app.use(bodyParser.json());
