@@ -9,12 +9,15 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // REGION
-AWS.config.update({ region: "us-east-1" });
+AWS.config.update({ region: "us-east-1",accessKeyId,secretAccessKey,sessionToken });
 
 // SECRETS
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
 const USER_POOL_ID = "";
+const accessKeyId ="";
+const secretAccessKey = "";
+const sessionToken="";
 
 // GEN HASH
 function generateSecretHash(username) {
@@ -122,7 +125,63 @@ app.post("/confirm", async (req, res) => {
     res.status(400).json({ error: err.message || JSON.stringify(err) });
   }
 });
+app.get("/users", async (req, res) => {
+  const cognito = new AWS.CognitoIdentityServiceProvider(); 
+  const users = [];
+  let paginationToken = undefined;
 
+  try {
+    do {
+      const params = {
+        UserPoolId: USER_POOL_ID,
+        PaginationToken: paginationToken,
+      };
+
+      const response = await cognito.listUsers(params).promise();
+
+      for (const user of response.Users) {
+        try {
+          const groupResp = await cognito.adminListGroupsForUser({
+            Username: user.Username,
+            UserPoolId: USER_POOL_ID
+          }).promise();
+
+          const grupo = groupResp.Groups[0]?.GroupName || "Sin grupo";
+
+          users.push({
+            Email: user.Attributes.find(attr => attr.Name === 'email')?.Value || null,
+            Name: user.Attributes.find(attr => attr.Name === 'name')?.Value || null,
+            FamilyName: user.Attributes.find(attr => attr.Name === 'family_name')?.Value || null,
+            Group: grupo
+          });
+
+        } catch (err) {
+          console.warn(`Error con el usuario ${user.Username}: ${err.message}`);
+          users.push({
+            Username: user.Username,
+            Email: user.Attributes.find(attr => attr.Name === 'email')?.Value || null,
+            Group: "Sin grupo"
+          });
+        }
+      }
+
+      paginationToken = response.PaginationToken;
+
+    } while (paginationToken);
+
+    // Ordenar por grupo (alfabéticamente)
+    users.sort((a, b) => a.Group.localeCompare(b.Group));
+
+    res.json(users);
+
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error.message, error.stack);
+    res.status(500).json({ 
+      error: "Error al obtener usuarios de Cognito",
+      message: error.message 
+    });
+  }
+});
 /*
 app.get("/protegido", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
