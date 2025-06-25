@@ -92,6 +92,8 @@
 
  ### Ruta GET `/products`
 
+ **REQUIERE HEADER "Authorization" "Bearer TOKEN"**
+
  **Respuesta exitosa:**
  ```json
  [
@@ -110,6 +112,8 @@
  ---
 
  ### Ruta GET `/products/{id}`
+
+**REQUIERE HEADER "Authorization" "Bearer TOKEN"**
 
  **Respuesta exitosa:**
  ```json
