@@ -1,3 +1,4 @@
+// DEPENDENCIES
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -32,7 +33,8 @@ function generateSecretHash(username) {
     .update(username + CLIENT_ID)
     .digest("base64");
 }
-//Verificacion del token
+
+// VERIFY TOKEN
 let pems = null;
 async function getPems() {
   if (pems) return pems;
@@ -45,7 +47,8 @@ async function getPems() {
   });
   return pems;
 }
-//Funcion de verificacion por grupo
+
+// VERIFY GROUP
 function authorize(requiredGroup) {
   return async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
@@ -188,7 +191,11 @@ app.post("/confirm", async (req, res) => {
   }
 });
 
-// LIST USERS ROUTE
+//////////////////////////
+//// ENDPOINT BACKEND ////
+//////////////////////////
+
+// ROUTE USERS
 app.get("/users", async (req, res) => {
   const cognito = new AWS.CognitoIdentityServiceProvider(); 
   const users = [];
@@ -246,7 +253,8 @@ app.get("/users", async (req, res) => {
     });
   }
 });
-//Users protegido
+
+// ROUTE USERS WITH GROUPS
 app.get("/users-protegido", authorize('seguridad'), async (req, res) => {
   try {
     const apiGatewayUrl = "https://83rem998kf.execute-api.us-east-1.amazonaws.com/Seguridad/users";
@@ -263,24 +271,8 @@ app.get("/users-protegido", authorize('seguridad'), async (req, res) => {
     res.status(500).json({ error: "Error al obtener datos desde API Gateway" });
   }
 });
-app.get("/products/:id", authorize('seguridad'), async (req, res) => {
-  try {
-    const id = req.params.id;
 
-    const apiGatewayUrl = "https://83rem998kf.execute-api.us-east-1.amazonaws.com/Stock/products/${id}";
-
-    const response = await axios.get(apiGatewayUrl, {
-      headers: {
-        Authorization: req.headers.authorization // reenviamos el mismo token
-      }
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error("Error al llamar al API Gateway:", error.message);
-    res.status(500).json({ error: "Error al obtener datos desde API Gateway", });
-  }
-});
+// ROUTE PRODUCTS
 app.get("/products", authorize('stock'), async (req, res) => {
   try {
     const id = req.params.id;
@@ -300,6 +292,27 @@ app.get("/products", authorize('stock'), async (req, res) => {
   }
 });
 
+// ROUTE PRODUCTS:ID
+app.get("/products/:id", authorize('seguridad'), async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const apiGatewayUrl = `https://83rem998kf.execute-api.us-east-1.amazonaws.com/Stock/products/${id}`;
+
+    const response = await axios.get(apiGatewayUrl, {
+      headers: {
+        Authorization: req.headers.authorization // ADJUNTAR TOKEN A APIGATEWAY
+      }
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error al llamar al API Gateway:", error.message);
+    res.status(500).json({ error: "Error al obtener datos desde API Gateway", });
+  }
+});
+
+// SERVER LISTING
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0',() => {
   console.log(`Servidor corriendo en http://35.168.133.16:${PORT}`);
