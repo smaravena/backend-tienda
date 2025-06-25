@@ -67,7 +67,7 @@
 
  ---
 
- ### Ruta `/Confirm`
+ ### Ruta `/confirm`
 
  **Cuerpo de la solicitud (Body):**
  ```json
@@ -86,4 +86,42 @@
    "message": "Usuario confirmado exitosamente",
    "data": {}
  }
+ ```
+
+ ---
+
+ ### Ruta GET `/products`
+
+ **Respuesta exitosa:**
+ ```json
+ [
+  {
+    "id": 1073741824,
+    "sku": "string",
+    "name": "string",
+    "description": "string",
+    "price": 1073741824,
+    "cost": 1073741824,
+    "categoryId": 1073741824
+  }
+]
+ ```
+
+ ---
+
+ ### Ruta GET `/products/{id}`
+
+ **Respuesta exitosa:**
+ ```json
+ [
+  {
+    "id": 1073741824,
+    "sku": "string",
+    "name": "string",
+    "description": "string",
+    "price": 1073741824,
+    "cost": 1073741824,
+    "categoryId": 1073741824
+  }
+]
  ```
